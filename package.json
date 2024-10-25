@@ -4,6 +4,10 @@
   "description": "EAS attestations via Ethereum Account Abstraction",
   "main": "index.js",
   "type": "module",
+  "files": [
+    "src/eas.js",
+    "index.js"
+  ],
   "scripts": {
     "lint": "eslint",
     "test": "mocha --recursive 'src/**/__tests__/*.js'"
