@@ -111,4 +111,4 @@ async function main() {
 
 ### Other Considerations
 
-- A method to create attestation shemes on-chain
+- A script to create attestation scheme on-chain
