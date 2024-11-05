@@ -1,6 +1,6 @@
 {
   "name": "eas-lib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "EAS attestations via Ethereum Account Abstraction",
   "main": "index.js",
   "type": "module",
@@ -12,7 +12,8 @@
   "scripts": {
     "lint": "eslint",
     "build": "tsc",
-    "test": "mocha --recursive 'src/**/__tests__/*.js'"
+    "test": "mocha --recursive 'src/**/__tests__/*.js'",
+    "publish": "yarn build && npm publish"
   },
   "author": "",
   "license": "MIT",
