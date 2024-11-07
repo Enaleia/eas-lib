@@ -1,2 +1,2 @@
 export { EAS };
-import { EAS } from "./src/eas.js";
+import { EAS } from "./src/eas";
