@@ -1,2 +1,2 @@
-export { EAS };
-import { EAS } from "./src/eas";
+import { EASHelper } from './src/eas'
+export { EASHelper as EAS }
