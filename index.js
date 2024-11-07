@@ -1,2 +1,2 @@
-const { EAS } = require('./src/eas')
-module.exports = { EAS }
+const { EASHelper } = require('./src/eas')
+module.exports = { EAS: EASHelper }
