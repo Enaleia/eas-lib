@@ -4,7 +4,6 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "strict": true,
-    "outDir": "./types",
     "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true

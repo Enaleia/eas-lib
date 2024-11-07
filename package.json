@@ -3,7 +3,6 @@
   "version": "0.1.1",
   "description": "EAS attestations via Ethereum Account Abstraction",
   "main": "index.js",
-  "type": "module",
   "files": [
     "src/eas.js",
     "index.js",
@@ -19,7 +18,7 @@
   "license": "MIT",
   "devDependencies": {
     "@ethereum-attestation-service/eas-sdk": "^2.7.0",
-    "chai": "^5.1.1",
+    "chai": "^4.5.0",
     "chai-subset": "^1.6.0",
     "eslint": "^9.12.0",
     "mocha": "^10.7.3",

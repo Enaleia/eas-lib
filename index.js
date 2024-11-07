@@ -1,2 +1,2 @@
-import EAS from './src/eas.js'
-export { EAS }
+const { EAS } = require('./src/eas')
+module.exports = { EAS }

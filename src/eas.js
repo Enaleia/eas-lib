@@ -1,5 +1,5 @@
-import * as bip39 from 'bip39'
-import { Wallet, ethers } from 'ethers'
+const bip39 = require('bip39')
+const { Wallet, ethers } = require('ethers')
 
 /**
  * Class containing methods to work with the EAS protocol.
@@ -64,4 +64,4 @@ class EAS {
   }
 }
 
-export { EAS as default }
+module.exports = { EAS }

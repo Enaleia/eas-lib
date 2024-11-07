@@ -1,5 +1,5 @@
-import { expect } from 'chai'
-import EAS from '../eas.js'
+const { expect } = require('chai')
+const { EAS } = require('../eas')
 
 describe('EAS', () => {
   describe('generateMnemonic', () => {
