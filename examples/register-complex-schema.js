@@ -10,11 +10,11 @@ async function main() {
 
   // Registering the same schema twice will fail.
   const schema =
-    'string userId, string companyName, string companyCoordinates,' +
-    'string eventTimestamp, string[] eventCoordinates, string actionName,' +
-    'string collectorName, string[] inputIdentifier, string[] inputMaterial,' +
-    'uint256[] inputWeight, string[] outputIdentifier, string[] outputMaterial,' +
-    'uint256[] outputWeight, string productName, uint256 batchQuantity'
+    'string userID, string portOrCompanyName, string[] portOrCompanyCoordinates,' +
+    'string actionType, string actionDate, string[] actionCoordinates, string collectorName,' +
+    'string[] incomingMaterials, uint256[] incomingWeightsKg, string[] incomingCodes,' +
+    'string[] outgoingMaterials,  uint256[] outgoingWeightsKg, string[] outgoingCodes, ' +
+    'string productName, uint256 batchQuantity, string weightPerItemKg'
 
   try {
     const timerStart = Date.now()
