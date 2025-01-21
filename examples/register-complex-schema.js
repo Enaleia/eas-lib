@@ -17,7 +17,7 @@ async function main() {
     'string actionType, string actionDate, string[] actionCoordinates, string collectorName,' +
     'string[] incomingMaterials, uint256[] incomingWeightsKg, string[] incomingCodes,' +
     'string[] outgoingMaterials,  uint256[] outgoingWeightsKg, string[] outgoingCodes, ' +
-    'string productName, uint256 batchQuantity, string weightPerItemKg'
+    'string productName, string batchQuantity, string weightPerItemKg'
 
   try {
     const timerStart = Date.now()
