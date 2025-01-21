@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 // Run from root as `node examples/create-keys.js`
 const { EAS } = require('..')
 

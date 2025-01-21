@@ -1,7 +1,10 @@
-// Run from root as `node examples/register-schema.js`
+#! /usr/bin/env node
+
+// Run from root as `node examples/register-complex-schema.js`
 const { EAS } = require('..')
 
 // Make sure to copy the example .env file to the root of the project and fill in the values or this will fail.
+// .env: OP_PROVIDER and PRIVATE_KEY
 require('dotenv').config()
 
 async function main() {
