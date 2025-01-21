@@ -12,7 +12,7 @@ async function main() {
   const privateKey = process.env.PRIVATE_KEY
 
   // Registering the same schema twice will fail.
-  const schema = 'uint256 eventId, uint8 rating, string comment'
+  const schema = 'uint256 eventId, string[] weights, string comment'
 
   try {
     const timerStart = Date.now()
