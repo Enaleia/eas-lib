@@ -3,6 +3,10 @@ const bip39 = require('bip39')
 const { Wallet, ethers } = require('ethers')
 const { EAS, SchemaEncoder, SchemaRegistry } = require('@ethereum-attestation-service/eas-sdk')
 
+// The EAS contract addresses are valid for both OP Mainnet and Sepolia.
+const SCHEMA_REGISTRY_CONTRACT_ADDRESS = '0x4200000000000000000000000000000000000020'
+const ATTESTATION_CONTRACT_ADDRESS = '0x4200000000000000000000000000000000000021'
+
 /**
  * Class containing methods to work with the EAS protocol.
  */
@@ -95,8 +99,7 @@ class EASHelper {
       const signer = new ethers.Wallet(this.privateKey, provider)
 
       // Registry
-      const registryContractAddress = '0x4200000000000000000000000000000000000020'
-      const schemaRegistry = new SchemaRegistry(registryContractAddress)
+      const schemaRegistry = new SchemaRegistry(SCHEMA_REGISTRY_CONTRACT_ADDRESS)
       schemaRegistry.connect(signer)
 
       // Register schema
