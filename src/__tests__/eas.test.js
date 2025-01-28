@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const { EAS } = require('../eas')
+const { EASHelper: EAS } = require('../eas')
 
 describe('EAS', () => {
   describe('generateMnemonic', () => {
