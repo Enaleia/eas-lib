@@ -1,4 +1,3 @@
-require('dotenv').config()
 const bip39 = require('bip39')
 const { Wallet, ethers } = require('ethers')
 const { EAS, SchemaEncoder, SchemaRegistry } = require('@ethereum-attestation-service/eas-sdk')
@@ -36,14 +35,16 @@ class EASHelper {
    * @returns {string} - The corresponding Ethereum private key (hex string).
    */
   static getPrivateKeyFromMnemonic(mnemonic) {
-    try {
-      if (!Array.isArray(mnemonic)) {
-        throw new Error('Mnemonic must be an array of words.')
-      }
-      if (mnemonic.length !== 12) {
-        throw new Error('Mnemonic must be a 12-word phrase.')
-      }
+    if (!Array.isArray(mnemonic)) {
+      console.log(`getPrivateKeyFromMnemonic: mnemonic must be an array of words.`)
+      return null
+    }
+    if (mnemonic.length !== 12) {
+      console.log(`getPrivateKeyFromMnemonic: mnemonic must be a 12-word phrase.`)
+      return null
+    }
 
+    try {
       // Use standard Ethereum path m/44'/60'/0'/0/0 for Optimism.
       const derivationPath = "m/44'/60'/0'/0/0"
 
@@ -53,7 +54,7 @@ class EASHelper {
 
       return wallet.privateKey
     } catch (error) {
-      console.error('Error generating private key:', error.message)
+      console.log(`getPrivateKeyFromMnemonic: error when generating private key: ${error.message}`)
       return null
     }
   }
@@ -73,7 +74,7 @@ class EASHelper {
       const wallet = new Wallet(privateKey)
       return wallet.address
     } catch (error) {
-      console.error('Error deriving address:', error.message)
+      console.log(`getAddressFromPrivateKey: error when deriving address: ${error.message}`)
       return null
     }
   }
@@ -93,28 +94,23 @@ class EASHelper {
    * @returns {Promise<string>} - The transaction hash of the schema registration.
    */
   async registerSchema(schema) {
-    try {
-      // Signer
-      const provider = new ethers.JsonRpcProvider(this.providerUrl)
-      const signer = new ethers.Wallet(this.privateKey, provider)
+    // Signer
+    const provider = new ethers.JsonRpcProvider(this.providerUrl)
+    const signer = new ethers.Wallet(this.privateKey, provider)
 
-      // Registry
-      const schemaRegistry = new SchemaRegistry(SCHEMA_REGISTRY_CONTRACT_ADDRESS)
-      schemaRegistry.connect(signer)
+    // Registry
+    const schemaRegistry = new SchemaRegistry(SCHEMA_REGISTRY_CONTRACT_ADDRESS)
+    schemaRegistry.connect(signer)
 
-      // Register schema
-      const tx = await schemaRegistry.register({
-        schema,
-        resolverAddress: '0x0000000000000000000000000000000000000000', // No resolver by default!
-        revocable: true,
-      })
+    // Register schema
+    const tx = await schemaRegistry.register({
+      schema,
+      resolverAddress: '0x0000000000000000000000000000000000000000', // No resolver by default!
+      revocable: true,
+    })
 
-      const schemaUID = await tx.wait()
-      return schemaUID
-    } catch (error) {
-      console.error('Error registering schema:', error)
-      throw error
-    }
+    const schemaUID = await tx.wait()
+    return schemaUID
   }
 }
 
