@@ -1,6 +1,11 @@
 const bip39 = require('bip39')
 const { Wallet, ethers } = require('ethers')
-const { EAS, SchemaEncoder, SchemaRegistry } = require('@ethereum-attestation-service/eas-sdk')
+const {
+  EAS,
+  SchemaEncoder,
+  SchemaRegistry,
+  NO_EXPIRATION,
+} = require('@ethereum-attestation-service/eas-sdk')
 
 // The EAS contract addresses are valid for both OP Mainnet and Sepolia.
 const SCHEMA_REGISTRY_CONTRACT_ADDRESS = '0x4200000000000000000000000000000000000020'
@@ -111,6 +116,68 @@ class EASHelper {
 
     const schemaUID = await tx.wait()
     return schemaUID
+  }
+
+  /**
+   * Split the schema string into types and names.
+   * Examples schema: 'uint256 eventId, string[] weights, string comment'
+   *
+   * @param {string} schema
+   * @returns {object} - An object containing the schema types.
+   */
+  static getSchemaTypes(schema) {
+    const schemaTypes = {}
+    const schemaParts = schema.split(',').map((part) => part.trim())
+    for (const schemaPart of schemaParts) {
+      const [type, name] = schemaPart.split(' ')
+      schemaTypes[name] = type
+    }
+    return schemaTypes
+  }
+
+  /**
+   * Publish data to the EAS attestation contract.
+   *
+   * @param {string} providerUrl - The RPC URL of the Ethereum provider.
+   * @param {string} privateKey - The private key of the wallet that will deploy the schema or send/get attestations
+   * @param {string} schema - The schema definition string.
+   * @param {string} schemaUID - The schema UID.
+   * @param {object} data - The data to be attested.
+   */
+  async attest(providerUrl, privateKey, schema, schemaUID, data) {
+    const easContractAddress = '0x4200000000000000000000000000000000000021'
+    const eas = new EAS(easContractAddress)
+
+    // Initialize signer.
+    const provider = new ethers.JsonRpcProvider(providerUrl)
+    const signer = new ethers.Wallet(privateKey, provider)
+
+    // Signer must be an ethers-like signer.
+    await eas.connect(signer)
+
+    // Prepare data for encoding.
+    const schemaTypes = EASHelper.getSchemaTypes(schema)
+    const schemaData = []
+    for (const [name, value] of Object.entries(data)) {
+      schemaData.push({ name, value, type: schemaTypes[name] })
+    }
+
+    // Initialize SchemaEncoder with the schema string
+    const schemaEncoder = new SchemaEncoder(schema)
+    const encodedData = schemaEncoder.encodeData(schemaData)
+
+    const tx = await eas.attest({
+      schema: schemaUID,
+      data: {
+        recipient: '0x0000000000000000000000000000000000000000',
+        expirationTime: NO_EXPIRATION,
+        revocable: true, // Be aware that if your schema is not revocable, this MUST be false
+        data: encodedData,
+      },
+    })
+    const newAttestationUID = await tx.wait()
+    console.log('New attestation UID:', newAttestationUID)
+    return newAttestationUID
   }
 }
 
