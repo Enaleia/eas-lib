@@ -198,7 +198,7 @@ class EASHelper {
     await eas.connect(signer)
 
     // Prepare data for encoding.
-    const schemaTypes = EASHelper.getSchemaTypes(schema)
+    const { types: schemaTypes } = EASHelper.getSchemaTypesAndKeys(schema)
     const schemaData = []
     for (const [name, value] of Object.entries(data)) {
       schemaData.push({ name, value, type: schemaTypes[name] })
