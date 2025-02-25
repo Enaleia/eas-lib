@@ -119,20 +119,62 @@ class EASHelper {
   }
 
   /**
-   * Split the schema string into types and names.
-   * Examples schema: 'uint256 eventId, string[] weights, string comment'
+   * Split the EAS schema string into types and keys.
+   * Examples EAS schema: 'uint256 eventId, string[] weights, string comment'
    *
-   * @param {string} schema
-   * @returns {object} - An object containing the schema types.
+   * @param {string} schema - The EAS schema definition string.
+   * @returns {object} - An object containing types and keys.
    */
-  static getSchemaTypes(schema) {
-    const schemaTypes = {}
+  static getSchemaTypesAndKeys(schema) {
+    const types = {}
+    const keys = new Set()
     const schemaParts = schema.split(',').map((part) => part.trim())
     for (const schemaPart of schemaParts) {
-      const [type, name] = schemaPart.split(' ')
-      schemaTypes[name] = type
+      const [type, key] = schemaPart.split(' ')
+      types[key] = type
+      keys.add(key)
     }
-    return schemaTypes
+    return { types, keys }
+  }
+
+  /**
+   * Validate the data against the EAS schema.
+   *
+   * @param {string} schema - The EAS schema definition string.
+   * @param {object} data - The data to be validated.
+   * @returns {object} - An object containing the validation status and message.
+   */
+  static validateSchemaData(schema, data) {
+    const { keys } = EASHelper.getSchemaTypesAndKeys(schema)
+
+    let missingKeys = []
+    for (const key of keys) {
+      if (!data[key]) missingKeys.push(key)
+    }
+
+    if (missingKeys.length > 0) {
+      return { status: false, missingKeys }
+    }
+
+    return { status: true }
+  }
+
+  /**
+   * Cast the data types according to the EAS schema.
+   *
+   * @param {string} schema - The EAS schema definition string.
+   * @param {object} data - The data to be casted.
+   */
+  static castSchemaDataTypes(schema, data) {
+    const schemaParts = schema.split(',').map((part) => part.trim())
+    for (const schemaPart of schemaParts) {
+      const [type, key] = schemaPart.split(' ')
+      if (type === 'int') {
+        data[key] = parseInt(data[key])
+      } else if (type === 'int[]') {
+        data[key] = data[key].map((item) => parseInt(item))
+      }
+    }
   }
 
   /**
