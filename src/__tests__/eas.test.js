@@ -67,3 +67,58 @@ describe('EAS', () => {
     })
   })
 })
+
+describe('EASHelper', () => {
+  describe('getSchemaTypesAndKeys', () => {
+    it('should split the schema string into types and keys', () => {
+      const schema = 'uint256 eventId, string[] weights, string comment'
+      const result = EAS.getSchemaTypesAndKeys(schema)
+      expect(result).to.deep.equal({
+        types: {
+          eventId: 'uint256',
+          weights: 'string[]',
+          comment: 'string',
+        },
+        keys: new Set(['eventId', 'weights', 'comment']),
+      })
+    })
+  })
+
+  describe('validateSchemaData', () => {
+    it('should validate data against the schema and return true if all keys are present', () => {
+      const schema = 'uint256 eventId, string[] weights, string comment'
+      const data = {
+        eventId: 1,
+        weights: ['1', '2'],
+        comment: 'test',
+      }
+      const result = EAS.validateSchemaData(schema, data)
+      expect(result).to.deep.equal({ status: true })
+    })
+
+    it('should return false and list missing keys if data is missing keys', () => {
+      const schema = 'uint256 eventId, string[] weights, string comment'
+      const data = {
+        eventId: 1,
+        comment: 'test',
+      }
+      const result = EAS.validateSchemaData(schema, data)
+      expect(result).to.deep.equal({ status: false, missingKeys: ['weights'] })
+    })
+  })
+
+  describe('castSchemaDataTypes', () => {
+    it('should cast data types according to the schema', () => {
+      const schema = 'int eventId, int[] weights'
+      const data = {
+        eventId: '1',
+        weights: ['1', '2', '3'],
+      }
+      EAS.castSchemaDataTypes(schema, data)
+      expect(data).to.deep.equal({
+        eventId: 1,
+        weights: [1, 2, 3],
+      })
+    })
+  })
+})
