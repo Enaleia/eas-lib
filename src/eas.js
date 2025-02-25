@@ -149,7 +149,7 @@ class EASHelper {
 
     let missingKeys = []
     for (const key of keys) {
-      if (!data[key]) missingKeys.push(key)
+      if (!(key in data)) missingKeys.push(key)
     }
 
     if (missingKeys.length > 0) {

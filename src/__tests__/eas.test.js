@@ -105,6 +105,17 @@ describe('EASHelper', () => {
       const result = EAS.validateSchemaData(schema, data)
       expect(result).to.deep.equal({ status: false, missingKeys: ['weights'] })
     })
+
+    it('should validate data against the schema and return true for they keys with empty strings or arrays', () => {
+      const schema = 'uint256 eventId, string[] weights, string comment'
+      const data = {
+        eventId: 1,
+        weights: [],
+        comment: '',
+      }
+      const result = EAS.validateSchemaData(schema, data)
+      expect(result).to.deep.equal({ status: true })
+    })
   })
 
   describe('castSchemaDataTypes', () => {
