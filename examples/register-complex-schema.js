@@ -21,8 +21,8 @@ async function main() {
 
   try {
     const timerStart = Date.now()
-    const eas = new EAS(providerUrl, privateKey)
-    const schemaUID = await eas.registerSchema(schema)
+    const eas = new EAS(providerUrl, privateKey, schema)
+    const schemaUID = await eas.registerSchema()
     console.log(`eas.registerSchema took ${Date.now() - timerStart} ms`)
     console.log('Schema registered successfully. Schema UID:', schemaUID)
   } catch (error) {
