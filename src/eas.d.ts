@@ -5,8 +5,10 @@ export class EASHelper {
   /**
    * @param {string} providerUrl - The RPC URL of the Ethereum provider.
    * @param {string} privateKey - The private key of the wallet that will deploy the schema or send/get attestations.
+   * @param {string} schema - The schema definition string.
+   * @param {string} schemaUID - The schema UID.
    */
-  constructor(providerUrl?: string, privateKey?: string)
+  constructor(providerUrl?: string, privateKey?: string, schema?: string, schemaUID?: string)
 
   /**
    * Generates a 12-word mnemonic phrase (128 bits of entropy).
@@ -31,8 +33,13 @@ export class EASHelper {
   /**
    * Register an EAS schema with the EAS registry.
    *
-   * @param {string} schema - The schema definition string.
    * @returns {Promise<string>} - The transaction hash of the schema registration.
    */
-  registerSchema(schema: string): Promise<string>
+  registerSchema(): Promise<string>
+  /**
+   * Publish data to the EAS attestation contract.
+   *
+   * @param {object} data - The data to be attested.
+   */
+  attest(data: object): Promise<string>
 }
