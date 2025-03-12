@@ -124,5 +124,5 @@ uint256 eventId, string[] weights, string comment
 The run the following commmand to register it:
 
 ```bash
-./register-schema.sh -p ./schema
+./register-schema.js -p ./schema
 ```
