@@ -30,12 +30,12 @@ Derives the Ethereum address from the provided private key.
 static getAddressFromPrivateKey(privateKey: string): string
 ```
 
-### loadEASSchema
+### registerSchema
 
 Load the EAS schema to an address.
 
 ```typescript
-static async loadEASSchema(schema: string): Promise<void>
+async registerSchema(): Promise<void>
 ```
 
 ### createAbstractAccount
@@ -109,6 +109,20 @@ async function main() {
 }
 ```
 
-### Other Considerations
+## Scripts
 
-- A script to create attestation scheme on-chain
+### Register Schema
+
+You can use the following bash script to register a schema.
+
+Create a schema file and name it `schema` with the following content:
+
+```
+uint256 eventId, string[] weights, string comment
+```
+
+The run the following commmand to register it:
+
+```bash
+./register-schema.sh -p ./schema
+```
