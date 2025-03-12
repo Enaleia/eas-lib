@@ -184,6 +184,7 @@ class EASHelper {
    * Publish data to the EAS attestation contract.
    *
    * @param {object} data - The data to be attested.
+   * @returns {Promise<string>} - The UID of the new attestation.
    */
   async attest(data) {
     const easContractAddress = '0x4200000000000000000000000000000000000021'
