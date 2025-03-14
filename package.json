@@ -37,5 +37,9 @@
   "engines": {
     "node": ">=20.18.0",
     "yarn": "1.22.22"
+  },
+  "resolutions": {
+    "hardhat": "file:./null",
+    "solc": "file:./null"
   }
 }
