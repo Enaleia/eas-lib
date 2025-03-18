@@ -1,6 +1,6 @@
 {
   "name": "eas-lib",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "EAS attestations via Ethereum Account Abstraction",
   "homepage": "https://github.com/Enaleia/eas-lib",
   "main": "index.js",
