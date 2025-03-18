@@ -1,5 +1,7 @@
 const { expect } = require('chai')
 const { EASHelper: EAS } = require('../eas')
+const sinon = require('sinon')
+const { ethers } = require('ethers')
 
 describe('EAS', () => {
   describe('generateMnemonic', () => {
@@ -130,6 +132,32 @@ describe('EASHelper', () => {
         eventId: 1,
         weights: [1, 2, 3],
       })
+    })
+  })
+
+  describe('getBalance', () => {
+    let easHelper
+    let providerStub
+
+    beforeEach(() => {
+      easHelper = new EAS('http://localhost:8545', '0xPRIVATE_KEY', '', '')
+      providerStub = sinon.stub(easHelper.provider, 'getBalance')
+    })
+
+    afterEach(() => {
+      providerStub.restore()
+    })
+
+    it('should return the balance of an Ethereum address', async () => {
+      providerStub.resolves(ethers.parseUnits('1000000000000000000', 'wei')) // 1 ETH in wei
+      const balance = await easHelper.getBalance('0xADDRESS')
+      expect(balance).to.equal('1.0')
+    })
+
+    it('should return null if there is an error', async () => {
+      providerStub.rejects(new Error('error'))
+      const balance = await easHelper.getBalance('0xADDRESS')
+      expect(balance).to.be.null
     })
   })
 })
