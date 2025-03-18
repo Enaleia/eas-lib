@@ -23,6 +23,8 @@ class EASHelper {
    */
   constructor(providerUrl, privateKey, schema, schemaUID) {
     this.providerUrl = providerUrl
+    this.provider = new ethers.JsonRpcProvider(providerUrl)
+
     this.privateKey = privateKey
     this.schema = schema
     this.schemaUID = schemaUID
@@ -103,8 +105,7 @@ class EASHelper {
    */
   async registerSchema() {
     // Signer
-    const provider = new ethers.JsonRpcProvider(this.providerUrl)
-    const signer = new ethers.Wallet(this.privateKey, provider)
+    const signer = new ethers.Wallet(this.privateKey, this.provider)
 
     // Registry
     const schemaRegistry = new SchemaRegistry(SCHEMA_REGISTRY_CONTRACT_ADDRESS)
@@ -191,8 +192,7 @@ class EASHelper {
     const eas = new EAS(easContractAddress)
 
     // Initialize signer.
-    const provider = new ethers.JsonRpcProvider(this.providerUrl)
-    const signer = new ethers.Wallet(this.privateKey, provider)
+    const signer = new ethers.Wallet(this.privateKey, this.provider)
 
     // Signer must be an ethers-like signer.
     await eas.connect(signer)
@@ -219,6 +219,46 @@ class EASHelper {
     })
     const newAttestationUID = await tx.wait()
     return newAttestationUID
+  }
+
+  /**
+   * Get the balance of an Ethereum address.
+   *
+   * @param {string} address - The Ethereum address.
+   * @returns {Promise<string>} - The balance of the address.
+   */
+  async getBalance(address) {
+    try {
+      const balance = await this.provider.getBalance(address)
+      return ethers.formatEther(balance)
+    } catch (error) {
+      console.log(`getBalance: error when getting balance: ${error.message}`)
+      return null
+    }
+  }
+
+  /**
+   * Fund an Ethereum address with some ethers.
+   *
+   * @param {string} recipientAddress - The Ethereum address to fund.
+   * @param {string} amount - The amount of ether to send (in ether units).
+   * @returns {Promise<string>} - The transaction hash of the funding transaction.
+   */
+  async fundAddress(recipientAddress, amount) {
+    try {
+      console.log('f00', ethers.Wallet)
+      const signer = new ethers.Wallet(this.privateKey, this.provider)
+      console.log('f0:', signer)
+      const tx = await signer.sendTransaction({
+        to: recipientAddress,
+        value: ethers.parseEther(amount),
+      })
+      await tx.wait()
+      return tx.hash
+    } catch (error) {
+      console.log(`fundAddress: error when funding address: ${error.message}`)
+      return null
+    }
   }
 }
 
