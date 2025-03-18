@@ -42,4 +42,21 @@ export class EASHelper {
    * @param {object} data - The data to be attested.
    */
   attest(data: object): Promise<string>
+
+  /**
+   * Get the balance of an Ethereum address.
+   *
+   * @param {string} address - The Ethereum address.
+   * @returns {Promise<string>} - The balance of the address.
+   */
+  getBalance(address: string): Promise<string>
+
+  /**
+   * Fund an Ethereum address with some ethers.
+   *
+   * @param {string} recipientAddress - The Ethereum address to fund.
+   * @param {string} amount - The amount of ether to send (in ether units).
+   * @returns {Promise<string>} - The transaction hash of the funding transaction.
+   */
+  fundAddress(recipientAddress: string, amount: string): Promise<string>
 }
