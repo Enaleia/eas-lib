@@ -246,9 +246,7 @@ class EASHelper {
    */
   async fundAddress(recipientAddress, amount) {
     try {
-      console.log('f00', ethers.Wallet)
       const signer = new ethers.Wallet(this.privateKey, this.provider)
-      console.log('f0:', signer)
       const tx = await signer.sendTransaction({
         to: recipientAddress,
         value: ethers.parseEther(amount),
