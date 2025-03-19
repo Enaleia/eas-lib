@@ -32,82 +32,43 @@ static getAddressFromPrivateKey(privateKey: string): string
 
 ### registerSchema
 
-Load the EAS schema to an address.
+Publish an EAS schema to an address.
 
 ```typescript
 async registerSchema(): Promise<void>
 ```
 
-### createAbstractAccount
+For more details, refer to the [register-schema.js example](examples/register-schema.js).
 
-Creates an abstract account for the wallet using the provided address. Throws an error on fail.
+### attest
 
-```typescript
-static async createAbstractAccount(address: string): Promise<void>
-```
-
-### prepareEASTx
-
-Prepares an EAS transaction by signing it with the provided private key.
+Publish data to the EAS attestation contract.
 
 ```typescript
-static prepareEASTx(data: any, privateKey: string): string
+attest(data: object): Promise<string>
 ```
 
-### prepareEASBatchTx
+For more details, refer to the [attest.js example](examples/attest.js).
 
-Prepares a batch of EAS transactions by signing each transaction in the batch.
+### getBalance
+
+Get the balance of an Ethereum address.
 
 ```typescript
-static prepareEASBatchTx(dataArray: any[], privateKey: string): string
+getBalance(address: string): Promise<string>
 ```
 
-### sendEASTx
+For more details, refer to the [check-balance.js example](examples/check-balance.js).
 
-Sends the transaction to the network.
+### fundAddress
+
+Fund an Ethereum address with some ethers.
 
 ```typescript
-static async sendEASTx(signedTx: string): Promise<string>
+fundAddress(recipientAddress: string, amount: string): Promise<string>
 ```
 
-### getEASExplorerLink
-
-Returns the EAS explorer link for the given UID.
-
-```typescript
-static getEASExplorerLink(uid: string): string
-```
-
-## Example Usage
-
-```typescript
-async function main() {
-  // Generate 12 words
-  const mnemonic: string[] = WalletLibrary.generate12Words()
-
-  // Derive private key from mnemonic
-  const privateKey: string = WalletLibrary.derivePrivateKeyFrom12Words(mnemonic)
-
-  // Derive public key and address from private key
-  const keyInfo = WalletLibrary.derivePublicKeyAndAddress(privateKey)
-  const address: string = keyInfo.address
-
-  // Create abstract account for wallet
-  await WalletLibrary.createAbstractAccount(address)
-
-  // Prepare EAS transaction
-  const easTransaction: string = WalletLibrary.prepareEASTx({ data: 'sample' }, privateKey)
-
-  // Prepare batch of EAS transactions
-  const easBatchTransaction: string = WalletLibrary.prepareEASBatchTx(
-    [{ data: 'sample1' }, { data: 'sample2' }],
-    privateKey
-  )
-
-  // Get EAS explorer link from UID
-  const explorerLink: string = WalletLibrary.getEASExplorerLink('uid123')
-}
-```
+For more details, refer to the [fund-address.js example](examples/fund-address.js).
 
 ## Scripts
 
@@ -115,7 +76,7 @@ async function main() {
 
 You can use the following bash script to register a schema.
 
-Create a schema file and name it `schema` with the following content:
+Create a schema file and name it `schema` with the following example content:
 
 ```
 uint256 eventId, string[] weights, string comment
